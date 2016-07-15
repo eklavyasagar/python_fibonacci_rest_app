@@ -1,5 +1,10 @@
 # Implementation of fibonacci-rest-app in Python
-* To set up app clone the project
+
+### Prerequisites
+    1. Python >= 2.7.X, < 3.X
+
+**Steps to build the Project**
+* To set up the app, clone the project
 * Install dependencies **pip install -r setup/requirements.txt**
 * Run the application using **python app.py**
 * Run individual test files test.py and func_test.py or use **python -m unittest discover**
