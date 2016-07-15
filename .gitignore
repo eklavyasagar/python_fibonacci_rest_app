@@ -1,0 +1,6 @@
+﻿﻿# pycharm cruft
+*.idea
+.Python
+
+﻿# mac cruft
+.DS_Store
