@@ -1,4 +1,4 @@
-# implementation of fibonacci-rest-app in Python
+# Implementation of fibonacci-rest-app in Python
 * To set up app clone the project
 * Install dependencies **pip install -r setup/requirements.txt**
 * Run the application using **python app.py**
@@ -11,4 +11,4 @@
      * http://[ip or hostname]:[port]/v1/fibonacci/get/[num]
 
 Tests
-* There are two tests one is a functional test and other is a unittest that i have writter for this project. I have tested the status code and json payload in functional testing. And fibonacci logic in unit testing.
+* There are two tests one is a functional test and other is a unittest that i have written for this project. I have tested the status code and json payload in functional testing. And fibonacci logic in unit testing.
