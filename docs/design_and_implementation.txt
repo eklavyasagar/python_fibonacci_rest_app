@@ -1,0 +1,80 @@
+Design and Implementation
+
+API Design:
+
+API Version: v1
+GET : /v1/fibonacci/get/{number}
+type: application/json
+
+Response:
+{
+  "results":['0','1','1','2','3','5'],
+  "status_code": 200
+}
+
+Error Response:
+{
+  "Exception": {"message"},
+  "status_code" : [errorcode]
+}
+
+Response Status Codes:
+  NEGATIVE_CODE: 400
+  SUCCESS_CODE: 200
+  FORBIDDEN_CODE: 405
+  CACHE_LIMIT_EXCEEDED_CODE: 414
+
+Web Server:
+* The Web Server used here is Flask, built on Python.
+* flask-restful module provides the necessary RESTful capabilities.
+* Caching is done using "pickle" module in python, which creates serialized cache of our list and stores it for later
+  retrieval
+* A Decorator called timeit has been used to time the execution of fibonacci method
+* Flask web server scaled well when checked with apache benchmarking tool for 100000 requests through ten concurrent
+  connections
+* No authentication is involved in accessing the API.
+* Output is dumped to the browser or stdout if accessed via shell.
+
+Fibonacci Implementation
+* The Fibonacci Sequence is the series of numbers: 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, ... The next number is found by
+  adding up the two numbers before it
+* In this application a straightforward loop based implementation with O(n) complexity has been implemented.
+* Also Memoization is used so as to cache few expensive calculations , although they do not contribute to speeding up
+  the computation by a large margin as the API by itself is stateless.
+* Since recursion limit restricts the usage of recursion to compute large sequences this method works better for this
+  use case.
+* The method takes in the number of elements as argument and returns a list of fibonacci strings.
+* Why string? Why not int? As the problem size grows int will not have the range to cover higher order numbers so it
+  is better to store them as strings to get the correct results.
+
+Points to Consider
+
+* Cache binary sizes increase significantly for larger problems. Eg. fibonacci(50000) cache is 250MB in size.
+* Can we improve this ? How to handle larger cache sizes and growing access complexity of a list ?
+* May be an alternative data storage so as to get linear access time ?
+  Or can we rotate cache on a time to time basis so as to not fill the server storage.
+* Can a key value store like redis help solve this ?
+* How to scale without running out of memory?
+
+Ideas for production
+
+* Though this application is production ready, Few thoughts
+    * For this application to scale on a production level load balancing has to be done so as to evenly distribute
+      computational load.
+    * On security level, offer token based authentication to requests where in each request should carry a
+      authentication token header to prevent unauthorized access. Enable SSL always.
+    * Log analysis to identify any critical errors and inform the system admin via mail.
+    * Have a distributed caching mechanism.
+    * Option to download the output instead of dumping it as a json response which becomes unmanagebale for large
+      inputs on browser or stdout.
+    * Parallelize the computation for large input sizes by using threads level or core level parallelism (Python
+      doesn't offer parallelism though, due to interpreter level lock)
+    * Code Setup
+    * Code is completely modularized and generic.
+    * Configurations are set in config.yaml
+    * helper functions are implemented in helper.py
+    * actual fibonacci implementation and caching read and write is done in fibonacci.py
+    * main app, app.py multiplexes the input value between reading output from cache and by computation
+    * test.py has unittests covering the fibonacci implementation
+    * func_test.py has the functional tests
+    * Any new feature can be added easily through fibonacci.py and new routes can be added at app.py.
