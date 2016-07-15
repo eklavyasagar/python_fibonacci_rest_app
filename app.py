@@ -8,8 +8,9 @@ import os
 #App Initialization
 app = Flask(__name__)
 api = Api(app)
-config = None
+config = helper.getConfig()
 cachelist = None
+
 #handler for default page
 class LandingPage(Resource):
     def get(self):
@@ -18,7 +19,7 @@ class LandingPage(Resource):
 #Handler for fibonacci/get/<num>
 class FibonacciGetWithParam(Resource):
     def get(self, num):
-        if num.isnumeric():          
+        if num.isnumeric():
             num = int(num)
             if num > config['CACHING_UPPER_LIMIT']:
                 return helper.handle_invalid_usage(config['CACHE_LIMIT_EXCEEDED_ERROR'], config['CACHE_LIMIT_EXCEEDED_CODE'],config)
@@ -61,7 +62,6 @@ class FibonacciGetWithoutParam(Resource):
 
 #set debug=False  in config.yaml for Production
 if __name__ == '__main__':
-    config = helper.getConfig()
     api.add_resource(LandingPage, '/')
     api.add_resource(FibonacciGetWithParam, '/{0}/{1}/<string:num>'.format(config["API_VERSION"], config["API_ENDPOINT"]))
     api.add_resource(FibonacciGetWithoutParam, '/{0}/{1}/'.format(config['API_VERSION'], config['API_ENDPOINT']))
