@@ -50,7 +50,10 @@ class Fibonacci(object):
         if config['CACHE_ENABLE']:
             if numOfElements >= LIMIT:
                 print "writing to cache"
-                pickleit=pickle.dump(flist, open("{0}{1}".format(config['CACHE_DIRECTORY'], str(numOfElements)), "wb"))
+                out = open("{0}{1}".format(config['CACHE_DIRECTORY'], str(numOfElements)), "wb")
+                pickle.dump(flist, out)
+                out.close()  # close it to make sure it's all been written
+                # pickleit=pickle.dump(flist, )
         return flist
   
     @staticmethod
@@ -60,8 +63,8 @@ class Fibonacci(object):
         print "fetching from cache::{0}".format(idealCachefile)
         """Fibo(number of elements) Gives the list of fibonacci series within the specified range as output loaded from cache"""
         try:
-            filen= open("{0}{1}".format(config['CACHE_DIRECTORY'], str(idealCachefile)),"rb")
-            flist = pickle.load(filen)
+            k = pickle.load(open("{0}{1}".format(config['CACHE_DIRECTORY'], str(idealCachefile)),"rb"))
+            flist = pickle.load(k)
             partialList= flist[0:numOfElements]
             return partialList
         except IOError:
